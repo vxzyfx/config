@@ -1,0 +1,216 @@
+" ================插件====================
+" 比如: String str = "123"，可以用cs"' 把双引号变成单引号
+Plug 'tpope/vim-surround'
+
+" 使用<leader> e 目录树呼出
+" q关闭打开的目录树
+" p跳转到当前目录的父级目录
+" x关闭当前目录打开的文件夹
+" J当前目录下多个文件/文件夹跳转到最下面的文件/文件夹
+" K当前目录下多个文件/文件夹跳转到最上面的文件/文件夹
+" o打开当前光标所在的文件/文件夹
+Plug 'preservim/nerdtree'
+
+" 可以快速跳转到你眼睛想去的地方，默认的话用leader键(空格)ss 然后输入你想到的位置的单词,然后就有提示字母，按下提示字母就可以进行跳转
+Plug 'easymotion/vim-easymotion'
+
+
+" ================================================================================================
+" = 基础配置 =====================================
+" ================================================================================================
+" leaderkey
+let mapleader=" "
+
+set clipboard+=unnamed     " ideavim的剪切板和系统的剪切板数据互通
+set showmode               " 显示当前模式
+set ignorecase             " 不区分大小写
+set scrolloff=20
+set history=200
+set number                 " number 是开启行号显示
+set relativenumber         " relativenumber是开启相对行号显示
+set nobackup
+set noswapfile 
+set incsearch hlsearch     " 搜索相关: hlsearch高亮搜索条件
+set keep-english-in-normal
+" 高效编辑方法参数，比如caa,daa,vaa等，可以尝试
+set argtextobj
+
+set sneak                 " 使用 s 或者 S 然后跟着两个字符进行快速跳转
+
+set ideajoin              " 使用ctrl + j 可以把两个字符串进行拼接起来
+
+" 使用jk 和 kj 代替 ESC键(我已经习惯了ctrl+c了，有需要可以打开注释)
+imap jk <Esc>
+" imap kj <Esc>
+set timeoutlen=300
+
+
+" ================================================================================================
+" = No Leader Keymaps =====================================
+" ================================================================================================
+" 插入模式下的移动
+" ctrl + hjkl 进行上下左右移动
+imap <C-h> <Left>
+imap <C-j> <Down>
+imap <C-k> <Up>
+imap <C-l> <Right>
+
+
+" paste之后不会把yank的内容替换掉
+vmap p _dp
+
+" 跳转到下一个错误的地方
+nmap <leader>ge <action>(GotoNextError)
+" 跳转到对应的测试类
+nmap <leader>gt <action>(GotoTest)
+" 在方法里会跳转到方法名，再gm会跳转到上面一个方法的方法名
+nmap <leader>gm <action>(MethodUp)
+" 跳转到对应的实现类
+nmap <leader>gi <action>(GotoImplementation)
+" last changed in current buffer(file)
+nmap <leader>ga '.
+" 返回操作
+nmap <leader>gb <action>(Back)
+
+" bookmark in whole program
+nmap ma mA
+nmap 'a 'A
+nmap ms mS
+nmap 's 'S
+nmap md mD
+nmap 'd 'D
+nmap mf mF
+nmap 'f 'F
+
+" 删除从当前字符到结尾的内容
+nmap df d$
+" 删除从当前字符到开始的内容
+nmap dl d^
+
+" 普通模式下，打开的文件左右移动，L移动到左边打开的文件，H是右边
+nmap L <action>(NextTab)
+nmap H <action>(PreviousTab)
+
+" =================以上内容不需要使用leader键辅助使用，下面的键位需要leader键辅助，本人使用的是空格键作为leader=============================
+
+" ================================================================================================
+
+" f: 查找 
+nmap <leader>ff <action>(GotoFile)
+nmap <leader>fl <action>(SelectInProjectView)
+
+nmap <leader>ft <action>(FindInPath)
+
+nmap <leader>fc <action>(GotoAction)
+
+nmap <leader>fp <action>(OpenProjectWindows)
+
+nmap <leader>fm <action>(ReformatCode) \| <action>(OptimizeImports)
+
+" =====================================================================================
+
+" g: Git 
+nmap <leader>gr :action Vcs.RollbackChangedLines<CR>
+
+
+" =====================================================================================
+
+" i: Insert 
+nmap <leader>i f(a
+
+" =====================================================================================
+
+" j: add Semicolon and goto nextline
+nmap <leader>j A;<ESC>o
+
+" =====================================================================================
+
+" n: 取消高亮 
+nmap <leader>nl :nohlsearch<CR>
+
+" =====================================================================================
+
+
+" 展示文件结构(函数和成员变量等等)
+nmap <leader>ss <action>(FileStructurePopup)
+
+nmap <leader>sb <action>(ShowBookmarks)
+
+" =====================================================================================
+
+" r: Run/Re
+
+nmap <leader>pp <action>(Run)
+nmap <leader>pr <action>(Rerun)
+
+nmap <leader>rt <action>(RerunTests)
+
+" 对选中的元素(函数/变量)进行重命名操作
+nmap <leader>rn <action>(RenameElement)
+
+" =====================================================================================
+
+" w: 窗口分割，跳转 
+nmap <leader>ww <C-W>w
+nmap <leader>wd <C-W>c
+nmap <leader>wj <C-W>j
+nmap <leader>wk <C-W>k
+nmap <leader>wh <C-W>h
+nmap <leader>wl <C-W>l
+nmap <leader>ws <C-W>s
+nmap <leader>w- <C-W>s
+nmap <leader>wv <C-W>v
+nmap <leader>w\| <C-W>v
+
+" =====================================================================================
+
+" z: zip(fold) 
+nmap <leader>zo <action>(ExpandAllRegions)
+nmap <leader>zc <action>(CollapseAllRegions)
+
+" =====================================================================================
+
+" c: 关闭打开的文件 
+" <Leader>cc: 关闭当前打开的Buffer
+nmap <leader>c :q!<CR>
+" <Leader>cr: 关闭当前打开的Buffer右侧的Buffer
+nmap <leader>cr <action>(CloseAllToTheRight)
+" <leader>cl: 关闭当前打开的Buffer左侧的Buffer
+nmap <leader>cl <action>(CloseAllToTheLeft)
+" <leader>ce: 关闭除了当前Buffer外其他被打开的Buffer
+nmap <leader>ce <action>(CloseAllEditorsButActive)
+
+" =====================================================================================
+
+" e: 项目导航栏
+nmap <leader>e <action>(ActivateProjectToolWindow)
+
+" e: Extract,视觉模式下才起作用
+" 函数抽取
+vmap <leader>em <action>(ExtractMethod)
+" 常量抽取
+vmap <leader>ec <action>(IntroduceConstant)
+" 字段抽取
+vmap <leader>ef <action>(IntroduceField)
+" 变量抽取
+vmap <leader>ev <action>(IntroduceVariable)
+
+" =====================================================================================
+
+" maven/gradle 刷新项目
+nmap <leader>ms <action>(ExternalSystem.ProjectRefreshAction)
+
+" 删除整个方法(但不包括方法上的注释)
+nmap dam :action MethodUp<cr>v0Of{%d
+
+" idea和vim的快捷键设置持久化
+sethandler <C-A> a:ide
+sethandler <C-C> a:vim
+sethandler <C-F> a:ide
+sethandler <C-G> a:ide
+sethandler <C-P> a:vim
+sethandler <C-Q> a:vim
+sethandler <C-R> a:vim
+sethandler <C-S> a:vim
+sethandler <C-U> a:vim
+sethandler <C-V> a:vim
